@@ -1,18 +1,15 @@
 #ifndef PI_SBUS
 #define PI_SBUS
 
-#define BAUDRATE 100000
-
-class Pi_SBus {
+class PiSBus {
     public:
+        PiSBus(std::string port);
         uint8_t sbus_data[25];
-        uint16_t begin();
-        void //
-        void send;
+        int uint16_t Begin();
 
     private:
-        uint8_t
-        uint8_t
-        uint8_t
-        uint8_t
+       std::string _port;
+       int _file;
+       
+
 }
