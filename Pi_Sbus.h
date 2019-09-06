@@ -4,7 +4,7 @@
 class PiSBus {
     public:
         PiSBus(std::string);
-        int uint16_t Begin();
+        int Begin();
         void Read();
         void DisplayData();
 
