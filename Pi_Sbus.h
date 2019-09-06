@@ -10,8 +10,7 @@ class PiSBus {
     private:
        std::string _port;
        int _file;
-       
 
-}
+};
 
 #endif

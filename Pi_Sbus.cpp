@@ -11,6 +11,7 @@ PiSBus::PiSBus(std::string port) {
     _port = port;
 }
 
+/** Setting up serial communication with the right parameters for the SBus communication **/
 int PiSBus::Begin() {
     _file = open(_port.c_str(), O_RDWR);
     if(_file < 0) {
@@ -38,7 +39,6 @@ int PiSBus::Begin() {
 
     return 0;
 }
-
 
 bool PiSBus::Update() {
     
