@@ -40,8 +40,35 @@ int PiSBus::Begin() {
     return 0;
 }
 
-bool PiSBus::Update() {
-    
+bool PiSBus::Read() {
+    int bytes_read;
+
+    while(1) {
+        bytes_read = read(_file, &_sbus_data, sizeof(_sbus_data));
+
+        //0x0F is the start header for the Sbus protocol.
+        if(_sbus_data[0] == 0x0F && _sbus_data[24] == 0x00) {
+            break;
+        }
+    }
+
+    //0x07FF is to ensure the bits have approriate value
+    _channel_values[0]  = (uint16_t)((_sbus_data[1]       | _sbus_data[2]  << 8) & 0x07FF);
+    _channel_values[1]  = (uint16_t)((_sbus_data[2]  >> 3 | _sbus_data[3]  << 5) & 0x07FF);
+    _channel_values[2]  = (uint16_t)((_sbus_data[3]  >> 6 | _sbus_data[4]  << 2 | _sbus_data[5] << 10) & 0x07FF);
+    _channel_values[3]  = (uint16_t)((_sbus_data[5]  >> 1 | _sbus_data[6]  << 7) & 0x07FF);
+    _channel_values[4]  = (uint16_t)((_sbus_data[6]  >> 4 | _sbus_data[7]  << 4) & 0x07FF);
+    _channel_values[5]  = (uint16_t)((_sbus_data[7]  >> 7 | _sbus_data[8]  << 1 | _sbus_data[9] << 9) & 0x07FF);
+    _channel_values[6]  = (uint16_t)((_sbus_data[9]  >> 2 | _sbus_data[10] << 6) & 0x07FF);
+    _channel_values[7]  = (uint16_t)((_sbus_data[10] >> 5 | _sbus_data[11] << 3) & 0x07FF);
+    _channel_values[8]  = (uint16_t)((_sbus_data[12]      | _sbus_data[13] << 8) & 0x07FF);
+    _channel_values[9]  = (uint16_t)((_sbus_data[13] >> 3 | _sbus_data[14] << 5) & 0x07FF);
+    _channel_values[10] = (uint16_t)((_sbus_data[14] >> 6 | _sbus_data[15] << 2 | _sbus_data[16] << 10) & 0x07FF);
+    _channel_values[11] = (uint16_t)((_sbus_data[16] >> 1 | _sbus_data[17] << 7) & 0x07FF);
+    _channel_values[12] = (uint16_t)((_sbus_data[17] >> 4 | _sbus_data[18] << 4) & 0x07FF);
+    _channel_values[13] = (uint16_t)((_sbus_data[18] >> 7 | _sbus_data[19] << 1 | _sbus_data[20] << 9) & 0x07FF);
+    _channel_values[14] = (uint16_t)((_sbus_data[20] >> 2 | _sbus_data[21] << 6) & 0x07FF);
+    _channel_values[15] = (uint16_t)((_sbus_data[21] >> 5 | _sbus_data[22] << 3) & 0x07FF);
 }
 
 bool PiSBus::Send() {
