@@ -4,6 +4,7 @@
 #include <fcntl.h>      // For open / close file.
 #include <sys/ioctl.h>  // For manipulating io.
 #include <string.h>
+#include <asm-generic/termbits.h> // For setting up serial params and having a non-default freq.
 
 #define BAUDRATE 100000
 
@@ -40,7 +41,7 @@ int PiSBus::Begin() {
     return 0;
 }
 
-bool PiSBus::Read() {
+void PiSBus::Read() {
     int bytes_read;
 
     while(1) {
@@ -71,10 +72,10 @@ bool PiSBus::Read() {
     _channel_values[15] = (uint16_t)((_sbus_data[21] >> 5 | _sbus_data[22] << 3) & 0x07FF);
 }
 
-bool PiSBus::Send() {
-
+PiSBus::~PiSBus() {
+    close(_file);
 }
 
-PiSBus::~PiSBus() {
-
+void PiSBus::DisplayData() {
+    std::cout << "Read data" << _channel_values[0] << " : " << _channel_values[1] << " : " << _channel_values[3] << std::endl;
 }

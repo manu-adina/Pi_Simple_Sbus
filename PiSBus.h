@@ -3,10 +3,9 @@
 
 class PiSBus {
     public:
-        PiSBus(std::string);
+        PiSBus(std::string port);
         int uint16_t Begin();
         void Read();
-        void DisplayData();
 
     private:
        std::string _port;

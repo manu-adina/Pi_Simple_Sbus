@@ -34,7 +34,6 @@ int main() {
 
     char line[100];
 
-
     while(1) {
         fgets(line, sizeof(line), stdin);
         sscanf(line, "%d %d %d", &pan_value, &tilt_value, &roll_value);
@@ -51,6 +50,7 @@ int main() {
         }
         printf("Write Success\n");
     }
+
     return 0;
 }
 
