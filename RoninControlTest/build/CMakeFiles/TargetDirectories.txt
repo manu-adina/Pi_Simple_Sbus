@@ -1,0 +1,3 @@
+/home/pi/Documents/PiRoninControl/RoninControlTest/build/CMakeFiles/rebuild_cache.dir
+/home/pi/Documents/PiRoninControl/RoninControlTest/build/CMakeFiles/Test.dir
+/home/pi/Documents/PiRoninControl/RoninControlTest/build/CMakeFiles/edit_cache.dir

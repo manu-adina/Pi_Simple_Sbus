@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/PiSBus.h
+iostream
+-
+
+/home/pi/Documents/PiRoninControl/RoninControlTest/src/PiSBus.cpp
+PiSBus.h
+/home/pi/Documents/PiRoninControl/RoninControlTest/src/PiSBus.h
+errno.h
+-
+fcntl.h
+-
+sys/ioctl.h
+-
+unistd.h
+-
+string.h
+-
+asm-generic/termbits.h
+-
+
+/home/pi/Documents/PiRoninControl/RoninControlTest/src/SBus_Read.cpp
+PiSBus.h
+/home/pi/Documents/PiRoninControl/RoninControlTest/src/PiSBus.h
+unistd.h
+-
+

@@ -3,13 +3,13 @@
 
 int main() {
 
-    PiSBus sbus("lol"); // Need to find the serial output
+    PiSBus sbus("/dev/ttyUSB0"); // Need to find the serial output
     sbus.Begin();
 
     while(1) {
         sbus.Read();
         sbus.DisplayData();
-        usleep(100000);
+        usleep(10000);
     }
 
     return 0;

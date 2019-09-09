@@ -48,13 +48,14 @@ void PiSBus::Read() {
     while(1) {
         bytes_read = read(_file, &_sbus_data, sizeof(_sbus_data));
 
-        //0x0F is the start header for the Sbus protocol.
+        // 0x0F is the start header for the Sbus protocol.
         if(_sbus_data[0] == 0x0F && _sbus_data[24] == 0x00) {
             break;
         }
     }
 
-    //0x07FF is to ensure the bits have approriate value
+    // 0x07FF is to ensure that the data is 11 bits long, so it '0's the other 5 bits
+    // Retreiving the data from the frame.
     _channel_values[0]  = (uint16_t)((_sbus_data[1]       | _sbus_data[2]  << 8) & 0x07FF);
     _channel_values[1]  = (uint16_t)((_sbus_data[2]  >> 3 | _sbus_data[3]  << 5) & 0x07FF);
     _channel_values[2]  = (uint16_t)((_sbus_data[3]  >> 6 | _sbus_data[4]  << 2 | _sbus_data[5] << 10) & 0x07FF);
@@ -73,10 +74,43 @@ void PiSBus::Read() {
     _channel_values[15] = (uint16_t)((_sbus_data[21] >> 5 | _sbus_data[22] << 3) & 0x07FF);
 }
 
+int PiSBus::Insert_Data_Into_Channel(int channel, int value) {
+    if(value < 0 || value > 2047 || channel < 0 || channel > 15) {
+        std::cerr << "Inapporiate channel or value" << std::endl;
+    }
+
+
+
+
+
+}
+
+int PiSBus::Write() {
+    uint16_t frame_to_send[25];
+    
+    frame_to_send[0]  = 
+    frame_to_send[1]  = 
+    frame_to_send[2]  = 
+    frame_to_send[3]  = 
+    frame_to_send[4]  = 
+    frame_to_send[5]  = 
+    frame_to_send[6]  = 
+    frame_to_send[7]  = 
+    frame_to_send[8]  = 
+    frame_to_send[9]  = 
+    frame_to_send[10] = 
+    frame_to_send[11] = 
+    frame_to_send[12] = 
+    frame_to_send[13] = 
+    frame_to_send[14] = 
+    frame_to_send[15] = 
+}
+
 PiSBus::~PiSBus() {
     close(_file);
 }
 
+// Displays the channel data.
 void PiSBus::DisplayData() {
-    std::cout << "Read data" << _channel_values[0] << " : " << _channel_values[1] << " : " << _channel_values[3] << std::endl;
+    std::cout << "Read data " << _channel_values[0] << " : " << _channel_values[1] << " : " << _channel_values[3] << std::endl;
 }
