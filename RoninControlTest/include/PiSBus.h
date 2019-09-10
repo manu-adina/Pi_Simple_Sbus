@@ -9,6 +9,8 @@ class PiSBus {
         int Begin();
         void Read();
         void DisplayData();
+        int Write();
+        int InsertDataIntoChannel(int channel, uint16_t value); 
         ~PiSBus();
 
     private:

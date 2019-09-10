@@ -1,13 +1,14 @@
 #include <gtk/gth.h>
 
-
-
 static void cb_send_data() {
 
 }
 
+static void destroy() {
+    gtk_main_quit(); //TODO: make sure to send 1023 commands when quitting.
+}
+
 static void activate(GtkApplication *app, gpointer user_data) {
-    
     GtkWidget *window;
     GtkWidget *button;
     GtkWidget *box;
@@ -15,10 +16,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
     gtk_widow_set_title(GTK_WINDOW (window), "Ronin Control Simple GUI");
     gtk_container_set_border_width(GTK_CONTAINER (window), 10);
 
-    slider1_box = 
-    slider2_box = 
-    slider3_box = 
-    button_stop_box = 
+    box = 
 
     button = gtk_button_new_with_label("Stop");
     g_signal_connect(button_stop, "clicked", G_CALLBACK(cb_send_data), NULL); //TODO: need to send args.
