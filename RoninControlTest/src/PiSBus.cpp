@@ -74,36 +74,42 @@ void PiSBus::Read() {
     _channel_values[15] = (uint16_t)((_sbus_data[21] >> 5 | _sbus_data[22] << 3) & 0x07FF);
 }
 
-int PiSBus::Insert_Data_Into_Channel(int channel, int value) {
+int PiSBus::Insert_Data_Into_Channel(int channel, uint16_t value) {
     if(value < 0 || value > 2047 || channel < 0 || channel > 15) {
         std::cerr << "Inapporiate channel or value" << std::endl;
     }
 
-
-
-
-
+    _channel_values[channel] = value;
 }
 
 int PiSBus::Write() {
-    uint16_t frame_to_send[25];
+    uint8_t frame_to_send[25];
     
-    frame_to_send[0]  = 
-    frame_to_send[1]  = 
-    frame_to_send[2]  = 
-    frame_to_send[3]  = 
-    frame_to_send[4]  = 
-    frame_to_send[5]  = 
-    frame_to_send[6]  = 
-    frame_to_send[7]  = 
-    frame_to_send[8]  = 
-    frame_to_send[9]  = 
-    frame_to_send[10] = 
-    frame_to_send[11] = 
-    frame_to_send[12] = 
-    frame_to_send[13] = 
-    frame_to_send[14] = 
-    frame_to_send[15] = 
+    frame_to_send[0]  = 0x0F; // Header byte.
+    frame_to_send[1]  = (uint8_t)(_channel_values[0]);
+    frame_to_send[2]  = (uint8_t)(_channel_values[0] >> 8 | _channel_values << 3);
+    frame_to_send[3]  = (uint8_t)
+    frame_to_send[4]  = (uint8_t)
+    frame_to_send[5]  = (uint8_t)
+    frame_to_send[6]  = (uint8_t)
+    frame_to_send[7]  = (uint8_t)
+    frame_to_send[8]  = (uint8_t)
+    frame_to_send[9]  = (uint8_t)
+    frame_to_send[10] = (uint8_t)
+    frame_to_send[11] = (uint8_t)
+    frame_to_send[12] = (uint8_t)
+    frame_to_send[13] = (uint8_t)
+    frame_to_send[14] = (uint8_t)
+    frame_to_send[15] = (uint8_t)
+    frame_to_send[16] = (uint8_t)
+    frame_to_send[17] = (uint8_t)
+    frame_to_send[18] = (uint8_t)
+    frame_to_send[19] = (uint8_t)
+    frame_to_send[20] = (uint8_t)
+    frame_to_send[21] = (uint8_t)
+    frame_to_send[22] = (uint8_t)
+    frame_to_send[23] = (uint8_t)
+    frame_to_send[24] = (uint8_t)
 }
 
 PiSBus::~PiSBus() {
