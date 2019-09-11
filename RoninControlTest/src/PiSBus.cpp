@@ -15,9 +15,9 @@ PiSBus::PiSBus(std::string port) {
 
 /** Setting up serial communication with the right parameters for the SBus communication **/
 int PiSBus::Begin() {
-    _file = open(_port.c_str(), O_RDWR);
+    _file = open(_port.c_str(), O_RDWR | O_NOCTTY);
     if(_file < 0) {
-        std::cerr << "Error " << errno << " opening " << _port << ": " << strerror(errno) << std::endl;
+        std::cerr << "Error: " << errno << " opening " << _port << ": " << strerror(errno) << std::endl;
         return -1;
     }
 
@@ -36,28 +36,28 @@ int PiSBus::Begin() {
     tio.c_ospeed = BAUDRATE; // Set output Hz
 
     if(ioctl(_file, TCSETS2, &tio)) {
-        std::cerr << "Failed to set the serial params." << std::endl;
+        std::cerr << "Failed to set the serial params. " << errno << " : " <<strerror(errno) << std::endl;
         return -1;
     }
 
-    std::cout << "Channel values before: " << _channel_values[0] << std::endl;
-
-    for(int i = 0; i < 25; i++) {
+    for(int i = 0; i < 16; i++) {
         _channel_values[i] = 1023;
     }
-
-    std::cout << "Channel values after: " << _channel_values[0] << std::endl;
 
     return 0;
 }
 
-void PiSBus::Read() {
+int PiSBus::Read() {
     int bytes_read;
 
     std::cout << "Commencing to read" << std::endl;
 
     while(1) {
         bytes_read = read(_file, &_sbus_data, sizeof(_sbus_data));
+        if(bytes_read == -1) {
+            std::cerr << "Unable to Read: " << errno << ": " << strerror(errno) << std::endl;
+        }
+        std::cout << "Number of bytes " << bytes_read << std::endl;
 
         // 0x0F is the start header for the Sbus protocol.
         if(_sbus_data[0] == 0x0F && _sbus_data[24] == 0x00) {
@@ -65,7 +65,7 @@ void PiSBus::Read() {
         }
     }
 
-    std::cout << "Finsihed Reading" << std::endl;
+    std::cout << "Finished Reading" << std::endl;
 
     // 0x07FF is to ensure that the data is 11 bits long, so it '0's the other 5 bits
     // Retreiving the data from the frame.
@@ -131,7 +131,7 @@ int PiSBus::Write() {
         return -1;
     }
     
-    return 1;
+    return 0;
 }
 
 PiSBus::~PiSBus() {

@@ -26,9 +26,3 @@ string.h
 asm-generic/termbits.h
 -
 
-/home/pi/Documents/PiRoninControl/RoninControlTest/src/SBus_Read.cpp
-PiSBus.h
-/home/pi/Documents/PiRoninControl/RoninControlTest/src/PiSBus.h
-unistd.h
--
-
