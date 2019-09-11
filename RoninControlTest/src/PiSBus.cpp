@@ -77,9 +77,11 @@ void PiSBus::Read() {
 int PiSBus::InsertDataIntoChannel(int channel, uint16_t value) {
     if(value < 0 || value > 2047 || channel < 0 || channel > 15) {
         std::cerr << "Inapporiate channel or value" << std::endl;
+        return -1;
     }
 
     _channel_values[channel] = value;
+    return 1;
 }
 
 int PiSBus::Write() {
@@ -108,8 +110,15 @@ int PiSBus::Write() {
     frame_to_send[20] = (uint8_t)((_channel_values[13] & 0x07FF) >> 9  | (_channel_values[14] & 0x07FF) << 2); 
     frame_to_send[21] = (uint8_t)((_channel_values[14] & 0x07FF) >> 6  | (_channel_values[15] & 0x07FF) << 5);
     frame_to_send[22] = (uint8_t)((_channel_values[15] & 0x07FF) >> 3);
-    frame_to_send[23] = 0x00;
-    frame_to_send[24] = 0x00;
+    frame_to_send[23] = 0x00; // Flags
+    frame_to_send[24] = 0x00; // Footer
+
+    if(sizeof(frame_to_send) != write(_file, frame_to_send, sizeof(frame_to_send))) {
+        std::cerr << "Failed to send" << std::endl;
+        return -1;
+    }
+    
+    return 1;
 }
 
 PiSBus::~PiSBus() {
