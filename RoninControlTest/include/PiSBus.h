@@ -7,7 +7,7 @@ class PiSBus {
     public:
         PiSBus(std::string port);
         int Begin();
-        void Read();
+        int Read();
         void DisplayData();
         int Write();
         int InsertDataIntoChannel(int channel, uint16_t value); 

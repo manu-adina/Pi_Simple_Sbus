@@ -35,6 +35,14 @@ int PiSBus::Begin() {
     tio.c_ispeed = BAUDRATE; // Set input Hz
     tio.c_ospeed = BAUDRATE; // Set output Hz
 
+    //New settings maybe it will help. HELPED.
+    tio.c_oflag &= ~(OCRNL | ONLCR | ONLRET | ONOCR | OFILL | OPOST);
+    tio.c_iflag &= ~(IGNBRK | BRKINT | ICRNL | INLCR | PARMRK | INPCK | ISTRIP | IXON);
+    tio.c_lflag &= ~(ECHO | ECHONL | ICANON | IEXTEN | ISIG);
+    tio.c_cflag &= ~(CSIZE | PARODD | CBAUD);
+    
+    tio.c_cflag |= CS8;
+
     if(ioctl(_file, TCSETS2, &tio)) {
         std::cerr << "Failed to set the serial params. " << errno << " : " <<strerror(errno) << std::endl;
         return -1;
@@ -56,6 +64,7 @@ int PiSBus::Read() {
         bytes_read = read(_file, &_sbus_data, sizeof(_sbus_data));
         if(bytes_read == -1) {
             std::cerr << "Unable to Read: " << errno << ": " << strerror(errno) << std::endl;
+            return -1;
         }
         std::cout << "Number of bytes " << bytes_read << std::endl;
 
@@ -63,6 +72,8 @@ int PiSBus::Read() {
         if(_sbus_data[0] == 0x0F && _sbus_data[24] == 0x00) {
             break;
         }
+
+        usleep(7000);
     }
 
     std::cout << "Finished Reading" << std::endl;
@@ -85,6 +96,8 @@ int PiSBus::Read() {
     _channel_values[13] = (uint16_t)((_sbus_data[18] >> 7 | _sbus_data[19] << 1 | _sbus_data[20] << 9) & 0x07FF);
     _channel_values[14] = (uint16_t)((_sbus_data[20] >> 2 | _sbus_data[21] << 6) & 0x07FF);
     _channel_values[15] = (uint16_t)((_sbus_data[21] >> 5 | _sbus_data[22] << 3) & 0x07FF);
+
+    return 0;
 }
 
 int PiSBus::InsertDataIntoChannel(int channel, uint16_t value) {
