@@ -37,13 +37,24 @@ int PiSBus::Begin() {
 
     if(ioctl(_file, TCSETS2, &tio)) {
         std::cerr << "Failed to set the serial params." << std::endl;
+        return -1;
     }
+
+    std::cout << "Channel values before: " << _channel_values[0] << std::endl;
+
+    for(int i = 0; i < 25; i++) {
+        _channel_values[i] = 1023;
+    }
+
+    std::cout << "Channel values after: " << _channel_values[0] << std::endl;
 
     return 0;
 }
 
 void PiSBus::Read() {
     int bytes_read;
+
+    std::cout << "Commencing to read" << std::endl;
 
     while(1) {
         bytes_read = read(_file, &_sbus_data, sizeof(_sbus_data));
@@ -53,6 +64,8 @@ void PiSBus::Read() {
             break;
         }
     }
+
+    std::cout << "Finsihed Reading" << std::endl;
 
     // 0x07FF is to ensure that the data is 11 bits long, so it '0's the other 5 bits
     // Retreiving the data from the frame.
@@ -114,7 +127,7 @@ int PiSBus::Write() {
     frame_to_send[24] = 0x00; // Footer
 
     if(sizeof(frame_to_send) != write(_file, frame_to_send, sizeof(frame_to_send))) {
-        std::cerr << "Failed to send" << std::endl;
+        std::cerr << errno << "Failed to send: " << strerror(errno) << std::endl;
         return -1;
     }
     
