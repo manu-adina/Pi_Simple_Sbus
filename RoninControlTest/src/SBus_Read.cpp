@@ -1,53 +1,33 @@
 #include "PiSBus.h"
-#include <unistd.h> // usleep()
+#include <unistd.h>
+#include <thread>
+#include <cstdio>
+
+void foo() {
+    std::cout << "Hello" << std::endl;
+}
 
 int main(int argc, char *argv[]) {
 
-    if(argc != 3) {
-        std::cerr << "Too many or too few arguements." << std::endl;
-        return -1;
-    }
-
-    if(argv[1][0] != 'r' && argv[1][0] != 'w') {
-        std::cerr << "Incorrect arguements." << std::endl;
-        return -1;
-    }
-
-    std::string port = argv[2];
-
-    PiSBus sbus(port); // Need to find the serial output
+    std::string port = argv[1];
+    PiSBus sbus(port);
     sbus.Begin();
 
-    //sbus.InsertDataIntoChannel(0, 500);
-    //sbus.InsertDataIntoChannel(1, 500);
-    //sbus.InsertDataIntoChannel(3, 500);
+    char line[100];
+    
+    std::thread writing_to_bus(&PiSBus::Write, &sbus);
+    //std::thread read_bus(&PiSBus::Read, &sbus);
 
-    switch(argv[1][0]) {
-        case 'r':
-            std::cout << "Reading" << std::endl;
-            while(1) {
-                if(sbus.Read() == -1) {
-                    std::cerr << "Failed to read" << std::endl;
-                    return -1;
-                }
-                sbus.DisplayData();
-                usleep(10000);
-            }
-            break;
-
-        case 'w':
-            std::cout << "Writing" << std::endl;
-            while(1) {
-                if(sbus.Write() == -1) {
-                    std::cerr << "Failed to write" << std::endl;
-                }
-                usleep(7000);
-            }
-            break;
-
-        default:
-            return -1;
-            break;
+    while(1) {
+        fgets(line, sizeof(line), stdin);
+        int input_channel;
+        uint16_t input_value;
+        sscanf(line, "%d %d", &input_channel, &input_value);
+        sbus.InsertDataIntoChannel(input_channel, input_value);
+        sbus.DisplayData();
     }
+
+    writing_to_bus.join();
+    //read_bus.join();
     return 0;
 }

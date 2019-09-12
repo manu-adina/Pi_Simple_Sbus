@@ -1,1 +1,1 @@
-/usr/bin/c++     CMakeFiles/Test.dir/src/PiSBus.cpp.o CMakeFiles/Test.dir/src/SBus_Read.cpp.o  -o Test 
+/usr/bin/c++     CMakeFiles/Test.dir/src/PiSBus.cpp.o CMakeFiles/Test.dir/src/SBus_Read.cpp.o  -o Test -lpthread 
