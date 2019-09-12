@@ -58,15 +58,12 @@ int PiSBus::Begin() {
 int PiSBus::Read() {
     int bytes_read;
 
-    std::cout << "Commencing to read" << std::endl;
-
     while(1) {
         bytes_read = read(_file, &_sbus_data, sizeof(_sbus_data));
         if(bytes_read == -1) {
             std::cerr << "Unable to Read: " << errno << ": " << strerror(errno) << std::endl;
             return -1;
         }
-        std::cout << "Number of bytes " << bytes_read << std::endl;
 
         // 0x0F is the start header for the Sbus protocol.
         if(_sbus_data[0] == 0x0F && _sbus_data[24] == 0x00) {
@@ -75,8 +72,6 @@ int PiSBus::Read() {
 
         usleep(7000);
     }
-
-    std::cout << "Finished Reading" << std::endl;
 
     // 0x07FF is to ensure that the data is 11 bits long, so it '0's the other 5 bits
     // Retreiving the data from the frame.
@@ -153,5 +148,16 @@ PiSBus::~PiSBus() {
 
 // Displays the channel data.
 void PiSBus::DisplayData() {
-    std::cout << "Read data " << _channel_values[0] << " : " << _channel_values[1] << " : " << _channel_values[3] << std::endl;
+    std::cout << "Ch1 " << _channel_values[0] << " :  " << "Ch2 " << _channel_values[1] 
+        << " :  " << "Ch3 " << _channel_values[2] << " :  " << "Ch4 " << _channel_values[3] 
+        << " :  " << "Ch5 " << _channel_values[4] << " :  " << "Ch6 " << _channel_values[5]
+        << " :  " << "Ch7 " << _channel_values[6] << " :  " << "Ch8 " << _channel_values[7]
+        << std::endl;
+    std::cout << "Ch9 " << _channel_values[8] << " : " << "Ch10 " << _channel_values[9]
+        << " : " << "Ch11 " << _channel_values[10] << " : " << "Ch12 " << _channel_values[11]
+        << " : " << "Ch13 " << _channel_values[12] << " : " << "Ch14 " << _channel_values[13]
+        << " : " << "Ch15 " << _channel_values[14] << " : " << "Ch16 " << _channel_values[15]
+        <<std::endl;
+
+    std::cout << std::endl;
 }
